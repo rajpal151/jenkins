@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DIRECTORY_PATH = "path/to/code/directory"
-        TESTING_ENVIRONMENT = "testing_environment_name"
-        PRODUCTION_ENVIRONMENT = "your_name"
+        DIRECTORY_PATH = "sample.html"
+        TESTING_ENVIRONMENT = "test env"
+        PRODUCTION_ENVIRONMENT = "prod env"
     }
 
     stages {
