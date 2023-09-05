@@ -74,7 +74,7 @@ pipeline {
                                    <li>Security Scan Stage: ${currentBuild.result == 'SUCCESS' ? 'Passed' : 'Failed'}</li>
                                </ul>""",
                       mimeType: 'text/html',
-                      to: 'your-email@example.com',
+                      to: 'replyme151@gmail.com',
                       attachmentsPattern: '**/path/to/logs/**,sample.html'  // Include sample.html in attachments
             }
         }
