@@ -7,43 +7,75 @@ pipeline {
         PRODUCTION_ENVIRONMENT = "prod env"
     }
 
+ 
     stages {
         stage('Build') {
             steps {
-                echo "Fetching source code from ${DIRECTORY_PATH}"
-                echo "Compiling the code and generating artifacts"
+                sh 'mvn clean install'  // Replace with your build command
             }
         }
 
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests"
-                echo "Running integration tests"
+                sh 'run_unit_tests_command'  // Replace with your test command
+                sh 'run_integration_tests_command'  // Replace with your integration test command
             }
         }
 
-        stage('Code Quality Check') {
+        stage('Code Analysis') {
             steps {
-                echo "Checking the quality of the code"
+                sh 'sonar-scanner'  // Example: SonarQube scanner
             }
         }
 
-        stage('Deploy') {
+        stage('Security Scan') {
             steps {
-                echo "Deploying the application to ${TESTING_ENVIRONMENT}"
+                sh 'owasp-zap-scan-command'  // Replace with your security scan command
             }
         }
 
-        stage('Approval') {
+        stage('Deploy to Staging') {
             steps {
-                echo "Waiting for manual approval..."
-                sleep(time: 10, unit: 'SECONDS')
+                sh 'deploy-to-staging-command'  // Replace with your staging deployment command
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                sh 'run_integration_tests_on_staging_command'  // Replace with your staging integration tests command
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo "Deploying the code to ${PRODUCTION_ENVIRONMENT} production environment"
+                sh 'deploy-to-production-command'  // Replace with your production deployment command
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                currentBuild.result = 'SUCCESS'  // Set build result to SUCCESS
+            }
+        }
+        failure {
+            script {
+                currentBuild.result = 'FAILURE'  // Set build result to FAILURE
+            }
+        }
+
+        // Send email notifications for Test and Security Scan stages
+        always {
+            emailext subject: "Pipeline ${currentBuild.result}: ${currentBuild.fullDisplayName}",
+                      body: """<p>Stage Test and Security Scan results:</p>
+                               <ul>
+                                   <li>Test Stage: ${currentBuild.result == 'SUCCESS' ? 'Passed' : 'Failed'}</li>
+                                   <li>Security Scan Stage: ${currentBuild.result == 'SUCCESS' ? 'Passed' : 'Failed'}</li>
+                               </ul>""",
+                      mimeType: 'text/html',
+                      to: 'your-email@example.com',
+                      attachmentsPattern: '**/path/to/logs/**'  // Adjust this path to your log files
             }
         }
     }
