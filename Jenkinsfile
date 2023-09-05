@@ -1,17 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        DIRECTORY_PATH = "sample.html"
-        TESTING_ENVIRONMENT = "test env"
-        PRODUCTION_ENVIRONMENT = "prod env"
-    }
-
- 
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean install'  // Replace with your build command
+                sh 'mvn clean install'  // Replace with your build command, e.g., 'npm run build' for Node.js
             }
         }
 
@@ -51,6 +44,13 @@ pipeline {
                 sh 'deploy-to-production-command'  // Replace with your production deployment command
             }
         }
+
+        // Archive HTML Artifact
+        stage('Archive HTML Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'sample.html', allowEmptyArchive: true
+            }
+        }
     }
 
     post {
@@ -75,7 +75,7 @@ pipeline {
                                </ul>""",
                       mimeType: 'text/html',
                       to: 'your-email@example.com',
-                      attachmentsPattern: '**/path/to/logs/**'  // Adjust this path to your log files
+                      attachmentsPattern: '**/path/to/logs/**,sample.html'  // Include sample.html in attachments
             }
         }
     }
