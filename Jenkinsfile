@@ -55,27 +55,7 @@ pipeline {
 
     post {
         success {
-            script {
-                currentBuild.result = 'SUCCESS'  // Set build result to SUCCESS
-            }
-        }
-        failure {
-            script {
-                currentBuild.result = 'FAILURE'  // Set build result to FAILURE
-            }
-        }
-
-        // Send email notifications for Test and Security Scan stages
-        always {
-            emailext subject: "Pipeline ${currentBuild.result}: ${currentBuild.fullDisplayName}",
-                      body: """<p>Stage Test and Security Scan results:</p>
-                               <ul>
-                                   <li>Test Stage: ${currentBuild.result == 'SUCCESS' ? 'Passed' : 'Failed'}</li>
-                                   <li>Security Scan Stage: ${currentBuild.result == 'SUCCESS' ? 'Passed' : 'Failed'}</li>
-                               </ul>""",
-                      mimeType: 'text/html',
-                      to: 'replyme151@gmail.com',
-                      attachmentsPattern: '**/path/to/logs/**,sample.html'  // Include sample.html in attachments
+            emailext body: 'Testing Email from Jenkins', subject: 'Emaill Testing', to: 'replyme151@gmail.com'
             }
         }
     }
