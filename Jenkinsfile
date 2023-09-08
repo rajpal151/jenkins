@@ -58,7 +58,7 @@ pipeline {
             emailext subject: 'Email Testing',
                       body: 'Testing Email from Jenkins',
                       mimeType: 'text/html',
-                      to: 'replyme151@gmail.com',
+                      to: 'gauravrajpal151@gmail.com',
                       attachmentsPattern: 'sample.html'
             }
         }
