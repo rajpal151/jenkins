@@ -55,11 +55,7 @@ pipeline {
 
     post {
         success {
-            emailext subject: 'Email Testing',
-                      body: 'Testing Email from Jenkins',
-                      mimeType: 'text/html',
-                      to: 'gauravrajpal151@gmail.com',
-                      attachmentsPattern: 'sample.html'
+            emailext attachmentsPattern: 'sample.html', body: 'just checking of running jenkins', subject: 'testing of jenkins', to: 'gauravrajpal151@gmail.com'
             }
         }
     }
